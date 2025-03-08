@@ -147,7 +147,41 @@
         .try-again-btn:hover {
             background: #d32f2f;
         }
+        .animated-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #6e0327; /* Adjust based on your background */
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
 
+.animated-title::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(193, 239, 6, 0.6), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+.footer {
+    text-align: center;
+    background: #20404e;
+    color: white;
+    padding: 15px 0;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+
+       
     </style>
 </head>
 <body>
@@ -167,7 +201,7 @@
 
     <!-- Diabetes Prediction Form -->
     <div class="container">
-        <h1>Diabetes Prediction</h1>
+        <h1 class="animated-title">Diabetes Prediction</h1>
 
         <!-- Show prediction result if available -->
         {% if prediction_text %}
@@ -185,43 +219,43 @@
         
                 <div>
                     <label>Glucose:</label>
-                    <input type="number" name="glucose" min="0"  required value="{{ request.form.get('glucose', '') }}">
+                    <input type="number" name="glucose" min="0" max="200" required value="{{ request.form.get('glucose', '') }}">
                     <span class="instruction">Normal range: 70-140 mg/dL.</span>
                 </div>
         
                 <div>
                     <label>Blood Pressure:</label>
-                    <input type="number" name="blood_pressure" min="0"  required value="{{ request.form.get('blood_pressure', '') }}">
+                    <input type="number" name="blood_pressure" min="0" max="180" required value="{{ request.form.get('blood_pressure', '') }}">
                     <span class="instruction">Normal: 80-120 mmHg.</span>
                 </div>
         
                 <div>
                     <label>Skin Thickness:</label>
-                    <input type="number" name="skin_thickness" min="0"  required value="{{ request.form.get('skin_thickness', '') }}">
+                    <input type="number" name="skin_thickness" min="0" max="100" required value="{{ request.form.get('skin_thickness', '') }}">
                     <span class="instruction">Average: 10-50 mm.</span>
                 </div>
         
                 <div>
                     <label>Insulin:</label>
-                    <input type="number" name="insulin" min="0"  required value="{{ request.form.get('insulin', '') }}">
+                    <input type="number" name="insulin" min="0" max="300" required value="{{ request.form.get('insulin', '') }}">
                     <span class="instruction">Normal: 16-166 uU/mL.</span>
                 </div>
         
                 <div>
                     <label>BMI:</label>
-                    <input type="number" name="bmi" step="0.1" min="10" required value="{{ request.form.get('bmi', '') }}">
+                    <input type="number" name="bmi" step="0.1" min="10" max="50" required value="{{ request.form.get('bmi', '') }}">
                     <span class="instruction">Healthy: 18.5-24.9.</span>
                 </div>
         
                 <div>
                     <label>Diabetes Pedigree Function:</label>
-                    <input type="number" name="pedigree" step="0.01" min="0" required value="{{ request.form.get('pedigree', '') }}">
+                    <input type="number" name="pedigree" step="0.01" min="0" max="2.5" required value="{{ request.form.get('pedigree', '') }}">
                     <span class="instruction">Risk factor (0-2.5).</span>
                 </div>
         
                 <div>
                     <label>Age:</label>
-                    <input type="number" name="age" min="0" required value="{{ request.form.get('age', '') }}">
+                    <input type="number" name="age" min="0" max="120" required value="{{ request.form.get('age', '') }}">
                     <span class="instruction">Enter your age (years).</span>
                 </div>
             </div>
@@ -229,24 +263,17 @@
             <!-- Button Group -->
             <div class="button-group">
                 <button type="submit" class="predict-btn">Predict</button>
-                <button type="button" class="try-again-btn" onclick="window.location.href='/'">Try Again</button>
+                <button type="button" class="try-again-btn" onclick="window.location.href='/'">Try Again</button> 
+                
 
             </div>
         </form>
     </div>
-
-    <script>
-        function clearForm() {
-            let form = document.getElementById("diabetesForm");
-            form.reset(); // Clears all input fields
-    
-            let result = document.getElementById("predictionResult");
-            if (result) {
-                result.style.display = "none"; // Hide the prediction result
-            }
-        }
-    </script>
-    
+    <!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2025 DiaPredict. All Rights Reserved.#2AM</p>
+    <p>Contact Us: adityasah895@gmail.com | Phone: +91-9958171884</p>
+</footer>
 
 </body>
 </html>
