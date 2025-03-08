@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #450bc3, #752733);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e80404;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5bea06ed;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            display: inline;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #450bc3;
+        }
+
+        /* Search Bar */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f1f1f1;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            padding: 5px;
+            font-size: 16px;
+            background: transparent;
+        }
+
+        /* Center Content */
+        .container {
+            background: #eb9f9f;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            margin: 50px auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Inputs */
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #3a14b9;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #b4bd0526;
+        }
+
+        /* Instructions */
+        .instruction {
+            font-size: 14px;
+            color: #555;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .predict-btn {
+            background: #2F80ED;
+            color: white;
+        }
+
+        .predict-btn:hover {
+            background: #1E5BBF;
+        }
+
+        .try-again-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .try-again-btn:hover {
+            background: #d32f2f;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">DiaPredict</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="search-box">
+            <input type="text" placeholder="Search...">
+        </div>
+    </nav>
+
+    <!-- Diabetes Prediction Form -->
+    <div class="container">
+        <h1>Diabetes Prediction</h1>
+
+        <!-- Show prediction result if available -->
+        {% if prediction_text %}
+            <h2 style="color: green;" id="predictionResult">{{ prediction_text }}</h2>
+            <a href="/download" download><button type="button" class="predict-btn">Download Result</button></a>
+        {% endif %}
+
+        <form id="diabetesForm" action="/predict" method="post">
+            <div class="form-grid">
+                <div>
+                    <label>Pregnancies:</label>
+                    <input type="number" name="pregnancies" min="0" required value="{{ request.form.get('pregnancies', '') }}">
+                    <span class="instruction">Enter the number of times pregnant (0+).</span>
+                </div>
+        
+                <div>
+                    <label>Glucose:</label>
+                    <input type="number" name="glucose" min="0"  required value="{{ request.form.get('glucose', '') }}">
+                    <span class="instruction">Normal range: 70-140 mg/dL.</span>
+                </div>
+        
+                <div>
+                    <label>Blood Pressure:</label>
+                    <input type="number" name="blood_pressure" min="0"  required value="{{ request.form.get('blood_pressure', '') }}">
+                    <span class="instruction">Normal: 80-120 mmHg.</span>
+                </div>
+        
+                <div>
+                    <label>Skin Thickness:</label>
+                    <input type="number" name="skin_thickness" min="0"  required value="{{ request.form.get('skin_thickness', '') }}">
+                    <span class="instruction">Average: 10-50 mm.</span>
+                </div>
+        
+                <div>
+                    <label>Insulin:</label>
+                    <input type="number" name="insulin" min="0"  required value="{{ request.form.get('insulin', '') }}">
+                    <span class="instruction">Normal: 16-166 uU/mL.</span>
+                </div>
+        
+                <div>
+                    <label>BMI:</label>
+                    <input type="number" name="bmi" step="0.1" min="10" required value="{{ request.form.get('bmi', '') }}">
+                    <span class="instruction">Healthy: 18.5-24.9.</span>
+                </div>
+        
+                <div>
+                    <label>Diabetes Pedigree Function:</label>
+                    <input type="number" name="pedigree" step="0.01" min="0" required value="{{ request.form.get('pedigree', '') }}">
+                    <span class="instruction">Risk factor (0-2.5).</span>
+                </div>
+        
+                <div>
+                    <label>Age:</label>
+                    <input type="number" name="age" min="0" required value="{{ request.form.get('age', '') }}">
+                    <span class="instruction">Enter your age (years).</span>
+                </div>
+            </div>
+        
+            <!-- Button Group -->
+            <div class="button-group">
+                <button type="submit" class="predict-btn">Predict</button>
+                <button type="button" class="try-again-btn" onclick="window.location.href='/'">Try Again</button>
+
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function clearForm() {
+            let form = document.getElementById("diabetesForm");
+            form.reset(); // Clears all input fields
+    
+            let result = document.getElementById("predictionResult");
+            if (result) {
+                result.style.display = "none"; // Hide the prediction result
+            }
+        }
+    </script>
+    
+
+</body>
+</html>
